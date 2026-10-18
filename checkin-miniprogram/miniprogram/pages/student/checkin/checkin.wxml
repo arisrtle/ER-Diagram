@@ -1,0 +1,121 @@
+<view class="screen page-scroll {{compact ? 'compact' : ''}}">
+  <nav-bar back />
+
+  <!-- 我是谁 -->
+  <view class="who">
+    <text class="who-name">{{student.name}}</text>
+    <text class="who-meta">{{student.className}}<text class="num who-no">{{student.studentNo}}</text></text>
+    <view class="link who-out" hover-class="hover" bindtap="logout">退出</view>
+  </view>
+
+  <!-- 加载中 / 失败 / 没有课程 -->
+  <view wx:if="{{loading}}" class="grow center"><view class="loading-dot"></view></view>
+  <view wx:elif="{{loadError}}" class="grow center">
+    <view class="empty">
+      <view class="ring"><view class="dot"></view></view>
+      <text class="sub">{{loadError}}</text>
+      <view class="pill soft sm peb" hover-class="hover" bindtap="load">重新加载</view>
+    </view>
+  </view>
+  <view wx:elif="{{!courses.length}}" class="grow center">
+    <view class="empty">
+      <view class="ring"><view class="dot"></view></view>
+      <text class="h3">还没有课程</text>
+      <text class="sub">老师创建课程并设置签到点位后，这里会出现可以签到的课程。下拉可以刷新。</text>
+    </view>
+  </view>
+
+  <block wx:else>
+    <!-- 课程 -->
+    <scroll-view class="chips" scroll-x enable-flex show-scrollbar="{{false}}" scroll-into-view="c{{idx}}" scroll-with-animation>
+      <view class="chips-end"></view>
+      <view
+        wx:for="{{courses}}"
+        wx:key="id"
+        id="c{{index}}"
+        class="chip {{index === idx ? 'on' : ''}}"
+        data-idx="{{index}}"
+        bindtap="pickCourse"
+      >
+        <view wx:if="{{states[item.id].state === 'done'}}" class="chip-ok"><ic name="check" size="20" /></view>
+        <text>{{item.name}}</text>
+      </view>
+      <view class="chips-end"></view>
+    </scroll-view>
+
+    <view class="place">
+      <ic name="pin" size="28" />
+      <text class="place-text">{{course.address || '签到点'}}　范围 <text class="num">{{course.radius}}</text> 米</text>
+    </view>
+
+    <!-- 范围图 -->
+    <view class="radar-wrap">
+      <radar radius="{{course.radius}}" distance="{{distance}}" angle="{{angle}}" accuracy="{{accuracy}}" mode="{{mode === 'removed' ? 'used' : mode}}" />
+    </view>
+
+    <!-- 读数 -->
+    <view class="reading pad">
+      <view>
+        <view class="reading-label">{{mode === 'done' ? '签到时距离' : '距签到点'}}</view>
+        <view class="big num">{{distanceText}}<text class="big-unit">米</text></view>
+      </view>
+      <view class="meta">
+        <view wx:if="{{mode === 'done'}}" class="tag wait peb3">签到于 {{doneTime}}</view>
+        <view wx:elif="{{mode === 'used'}}" class="tag out peb3">本机已用</view>
+        <view wx:elif="{{mode === 'removed'}}" class="tag out peb3">记录已处理</view>
+        <view wx:elif="{{mode === 'in'}}" class="tag in peb3">在范围内</view>
+        <view wx:elif="{{mode === 'out'}}" class="tag out peb3">还差 {{over}} 米</view>
+        <view wx:else class="tag wait peb3">正在定位</view>
+        <view wx:if="{{phase === 'ok' && mode !== 'done' && mode !== 'used' && mode !== 'removed'}}" class="meta-line">
+          <text class="note">精度 ±<text class="num">{{accuracy}}</text> 米</text>
+          <view class="link" hover-class="hover" bindtap="relocate"><ic name="locate" size="28" />重新定位</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="grow"></view>
+
+    <!-- 签到区 -->
+    <view class="act safe-bottom">
+      <block wx:if="{{phase === 'denied' && (mode === 'wait')}}">
+        <view class="perm">
+          <text class="h3">需要你的位置</text>
+          <text class="sub">签到要判断你是否在教室范围内。请在设置里允许「位置信息」。</text>
+          <view class="pill cel peb" hover-class="hover" bindtap="openSetting"><ic name="locate" size="36" />去开启定位</view>
+        </view>
+      </block>
+      <block wx:elif="{{(phase === 'off' || phase === 'error') && mode === 'wait'}}">
+        <view class="perm">
+          <text class="h3">没有拿到位置</text>
+          <text class="sub">{{phase === 'off' ? '手机的定位服务没有打开。打开系统定位后再试。' : '定位失败，可能是信号不好。到窗边或开阔处再试一次。'}}</text>
+          <view class="pill cel peb" hover-class="hover" bindtap="retryLocate"><ic name="refresh" size="36" />重新定位</view>
+        </view>
+      </block>
+      <block wx:elif="{{mode === 'done'}}">
+        <view class="seal-wrap">
+          <view wx:if="{{justDone}}" class="burst"></view>
+          <view class="seal {{justDone ? 'just' : ''}}">
+            <text class="seal-t display">已签到</text>
+            <text class="seal-time num">{{doneTime}}</text>
+          </view>
+        </view>
+        <text class="hint">{{hint}}</text>
+      </block>
+      <block wx:elif="{{mode === 'used' || mode === 'removed'}}">
+        <view class="used">
+          <view class="used-t display">
+            <view>{{mode === 'used' ? '本机已' : '记录'}}</view>
+            <view>{{mode === 'used' ? '签过此课' : '已处理'}}</view>
+          </view>
+        </view>
+        <text class="hint">{{hint}}</text>
+      </block>
+      <block wx:else>
+        <hold-button mode="{{holdMode}}" label="{{holdLabel}}" sub="{{holdSub}}" bind:confirm="submit" bind:blocked="onBlocked" />
+        <text class="hint">{{hint}}</text>
+      </block>
+    </view>
+  </block>
+
+  <app-toast id="toast" />
+</view>

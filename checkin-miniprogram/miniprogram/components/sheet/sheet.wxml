@@ -1,0 +1,7 @@
+<view wx:if="{{mounted}}" class="root {{on ? 'on' : ''}}" catchtouchmove="noop">
+  <view class="scrim" bindtap="onScrim"></view>
+  <view class="panel" catchtap="noop">
+    <view class="grab"></view>
+    <slot></slot>
+  </view>
+</view>

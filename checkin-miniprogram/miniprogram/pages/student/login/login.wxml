@@ -1,0 +1,69 @@
+<view class="screen">
+  <nav-bar back />
+
+  <view class="pad head">
+    <view class="h1">学生登录</view>
+    <view class="sub" style="margin-top: 16rpx;">学号和姓名需要与老师导入的名单一致。不需要密码。</view>
+  </view>
+
+  <view class="pad form">
+    <view class="field">
+      <text class="field-label">学号</text>
+      <input
+        class="input digits peb3 {{focus === 'studentNo' ? 'focus' : ''}} {{error ? 'err' : ''}}"
+        type="text"
+        placeholder="例如 2023010101"
+        placeholder-class="ph"
+        value="{{studentNo}}"
+        maxlength="32"
+        confirm-type="next"
+        focus="{{focus === 'studentNo'}}"
+        data-key="studentNo"
+        bindinput="onInput"
+        bindfocus="onFocus"
+        bindblur="onBlur"
+        bindconfirm="nextField"
+      />
+    </view>
+    <view class="field">
+      <text class="field-label">姓名</text>
+      <input
+        class="input peb3 {{focus === 'name' ? 'focus' : ''}} {{error ? 'err' : ''}}"
+        type="text"
+        placeholder="与名单上一致"
+        placeholder-class="ph"
+        value="{{name}}"
+        maxlength="20"
+        confirm-type="go"
+        focus="{{focus === 'name'}}"
+        data-key="name"
+        bindinput="onInput"
+        bindfocus="onFocus"
+        bindblur="onBlur"
+        bindconfirm="submit"
+      />
+    </view>
+    <view wx:if="{{error}}" class="err-row">
+      <view class="err-ic"><ic name="warn" size="32" /></view>
+      <text class="err-text">{{error}}</text>
+    </view>
+  </view>
+
+  <view class="grow"></view>
+
+  <view class="foot pad safe-bottom">
+    <text class="note">下次会自动登录</text>
+    <view
+      class="go {{studentNo && name && !loading ? '' : 'off'}} {{loading ? 'busy' : ''}}"
+      hover-class="pressed"
+      bindtap="submit"
+      aria-role="button"
+      aria-label="登录"
+    >
+      <view wx:if="{{loading}}" class="spin"></view>
+      <ic wx:else name="arrow" size="48" />
+    </view>
+  </view>
+
+  <app-toast id="toast" />
+</view>

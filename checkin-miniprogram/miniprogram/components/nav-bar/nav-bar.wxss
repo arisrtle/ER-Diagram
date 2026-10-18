@@ -1,0 +1,10 @@
+.nav { flex: none; width: 100%; }
+.row { display: flex; align-items: center; gap: 20rpx; padding-left: 28rpx; }
+.back {
+  width: 76rpx; height: 76rpx; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--paper); color: var(--ink);
+  transition: transform 0.15s;
+}
+.back.pressed { transform: scale(0.9); }
+.title { font-size: 34rpx; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

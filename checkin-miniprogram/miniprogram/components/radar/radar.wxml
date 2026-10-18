@@ -1,0 +1,12 @@
+<view class="radar m-{{mode}}" style="width: {{size}}rpx; height: {{size}}rpx;" aria-label="签到范围示意图">
+  <view class="ring outer"></view>
+  <view class="ring double" style="width: {{rT * 4}}rpx; height: {{rT * 4}}rpx;"></view>
+  <view class="ring disk" style="width: {{rT * 2}}rpx; height: {{rT * 2}}rpx;"></view>
+  <view wx:if="{{mode === 'wait'}}" class="ring sweep" style="width: {{rT * 2}}rpx; height: {{rT * 2}}rpx;"></view>
+  <text class="rlabel num" style="top: {{labelTop}}rpx;">{{radius}} 米</text>
+
+  <view wx:if="{{showMe}}" class="line" style="width: {{lineLen}}rpx; transform: rotate({{angle}}deg);"></view>
+  <view class="pin"></view>
+  <view wx:if="{{showMe}}" class="acc" style="left: {{ux}}rpx; top: {{uy}}rpx; width: {{accR * 2}}rpx; height: {{accR * 2}}rpx;"></view>
+  <view wx:if="{{showMe}}" class="me" style="left: {{ux}}rpx; top: {{uy}}rpx;"></view>
+</view>

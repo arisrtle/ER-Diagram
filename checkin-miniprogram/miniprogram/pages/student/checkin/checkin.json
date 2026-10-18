@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "radar": "/components/radar/radar",
+    "hold-button": "/components/hold-button/hold-button"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#E9EFEC"
+}

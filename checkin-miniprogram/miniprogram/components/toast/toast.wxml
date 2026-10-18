@@ -1,0 +1,4 @@
+<view class="toast {{type}} {{on ? 'on' : ''}}" style="top: {{top}}px;" aria-role="alert">
+  <view class="dot"></view>
+  <text>{{text}}</text>
+</view>

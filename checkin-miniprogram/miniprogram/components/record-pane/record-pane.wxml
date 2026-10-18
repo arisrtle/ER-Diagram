@@ -1,0 +1,179 @@
+<view class="wrap">
+  <view class="tools">
+    <view class="pill ink sm peb" hover-class="hover" bindtap="openExport"><ic name="download" size="32" />导出 Excel</view>
+    <view class="pill soft sm peb2" hover-class="hover" bindtap="openAdd"><ic name="plus" size="32" />补录</view>
+  </view>
+
+  <scroll-view class="filters" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view class="filters-pad"></view>
+    <view class="chip sm {{courseId === '' ? 'on' : ''}}" data-id="" bindtap="pickCourse">全部课程</view>
+    <view wx:for="{{courses}}" wx:key="id" class="chip sm {{courseId === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="pickCourse">{{item.name}}</view>
+    <view class="filters-pad"></view>
+  </scroll-view>
+
+  <view class="search peb3">
+    <ic name="search" size="32" />
+    <input class="search-input" placeholder="搜索学号或姓名" placeholder-class="ph" value="{{keyword}}" confirm-type="search" bindinput="onKeyword" />
+    <view wx:if="{{keyword}}" class="search-clear" bindtap="clearKeyword"><ic name="close" size="28" /></view>
+  </view>
+
+  <scroll-view
+    class="list"
+    scroll-y
+    refresher-enabled
+    refresher-background="#E9EFEC"
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    bindscrolltolower="loadMore"
+    lower-threshold="200"
+  >
+    <view wx:if="{{loading}}" class="center"><view class="loading-dot"></view></view>
+    <view wx:elif="{{error && !list.length}}" class="empty">
+      <text class="sub">{{error}}</text>
+      <view class="pill soft sm peb" hover-class="hover" bindtap="load">重新加载</view>
+    </view>
+    <view wx:elif="{{!list.length}}" class="empty">
+      <view class="ring"><view class="dot"></view></view>
+      <text class="sub">{{keyword ? '没有找到匹配的记录。' : (courseId ? '这门课还没有人签到。' : '还没有签到记录。学生签到后会出现在这里。')}}</text>
+    </view>
+    <block wx:else>
+      <view class="rows">
+        <view wx:for="{{list}}" wx:key="id" class="rrow peb3" hover-class="pressed" data-i="{{index}}" bindtap="openEdit">
+          <view class="r-main">
+            <view class="r-name"><text>{{item.name}}</text><text class="r-no num">{{item.studentNo}}</text></view>
+            <text class="r-sub">{{item.className}}　{{item.courseName}}</text>
+          </view>
+          <view class="r-side">
+            <text class="r-time num">{{item.timeText}}</text>
+            <text wx:if="{{item.source === 'admin'}}" class="r-tag">补录</text>
+            <text wx:else class="r-tag ok num">{{item.distanceText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="more">
+        <view wx:if="{{loadingMore}}" class="loading-dot"></view>
+        <text wx:elif="{{!hasMore}}" class="note">共 {{total}} 条</text>
+      </view>
+    </block>
+    <view class="bottom-space"></view>
+  </scroll-view>
+</view>
+
+<!-- 修改 / 删除 -->
+<app-sheet show="{{editSheet}}" locked="{{busy}}" bind:close="closeEdit">
+  <block wx:if="{{edit}}">
+    <text class="h3">修改签到记录</text>
+    <view class="kv">
+      <text class="k">课程</text><text class="v">{{edit.courseName}}</text>
+      <text class="k">来源</text><text class="v">{{edit.source === 'admin' ? '管理员补录' : '学生签到'}}</text>
+      <block wx:if="{{edit.source !== 'admin'}}">
+        <text class="k">位置</text><text class="v num">距点位 {{edit.distanceText}}（范围 {{edit.radius}} 米）</text>
+        <text class="k">设备</text><text class="v num">{{edit.deviceTail}}</text>
+      </block>
+    </view>
+    <view class="row2">
+      <view class="field">
+        <text class="field-label">学号</text>
+        <input class="input compact digits peb3" value="{{edit.studentNo}}" maxlength="32" data-key="studentNo" bindinput="onEditField" />
+      </view>
+      <view class="field">
+        <text class="field-label">姓名</text>
+        <view class="input compact readonly peb4">{{edit.name}}</view>
+      </view>
+    </view>
+    <text class="note">填错人时改学号即可，保存后姓名和班级按名单更新。</text>
+    <view class="row2">
+      <view class="field">
+        <text class="field-label">签到日期</text>
+        <picker mode="date" value="{{edit.date}}" end="{{today}}" data-key="date" bindchange="onEditField">
+          <view class="input compact num peb3 picker">{{edit.date}}</view>
+        </picker>
+      </view>
+      <view class="field">
+        <text class="field-label">时间</text>
+        <picker mode="time" value="{{edit.time}}" data-key="time" bindchange="onEditField">
+          <view class="input compact num peb4 picker">{{edit.time}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="field">
+      <text class="field-label">备注</text>
+      <input class="input compact peb3" placeholder="可选" placeholder-class="ph" value="{{edit.remark}}" maxlength="60" data-key="remark" bindinput="onEditField" />
+    </view>
+
+    <view wx:if="{{confirmDel}}" class="confirm peb3">
+      <text>删除后，{{edit.name}} 和这台手机都不能再自助签到这门课；需要时可以用「补录」恢复。</text>
+      <view class="row2">
+        <view class="pill sm danger peb3 {{busy ? 'is-disabled' : ''}}" hover-class="hover" bindtap="removeRecord">确认删除</view>
+        <view class="pill sm soft peb4" hover-class="hover" bindtap="cancelDel">取消</view>
+      </view>
+    </view>
+    <view wx:else class="actions">
+      <view class="link danger" hover-class="hover" bindtap="askDel">删除记录</view>
+      <view class="pill cel peb grow-btn {{busy ? 'is-disabled' : ''}}" hover-class="hover" bindtap="saveEdit">{{busy ? '正在保存' : '保存修改'}}</view>
+    </view>
+  </block>
+</app-sheet>
+
+<!-- 补录 -->
+<app-sheet show="{{addSheet}}" locked="{{busy}}" bind:close="closeAdd">
+  <text class="h3">补录签到</text>
+  <text class="sub">给定位有问题或手机没电的同学补一条记录。每人每门课仍然只能有一条。</text>
+  <view class="field">
+    <text class="field-label">课程</text>
+    <picker mode="selector" range="{{courses}}" range-key="name" value="{{addCourseIdx}}" bindchange="onAddCourse">
+      <view class="input compact peb3 picker between"><text class="ellipsis">{{courses[addCourseIdx].name}}</text><text class="note">更换</text></view>
+    </picker>
+  </view>
+  <view class="field">
+    <text class="field-label">学号</text>
+    <input class="input compact digits peb4" placeholder="学生的学号" placeholder-class="ph" value="{{addNo}}" maxlength="32" data-key="addNo" bindinput="onAddField" />
+  </view>
+  <view class="field">
+    <text class="field-label">备注</text>
+    <input class="input compact peb3" placeholder="例如 定位失败，课上点名确认" placeholder-class="ph" value="{{addRemark}}" maxlength="60" data-key="addRemark" bindinput="onAddField" />
+  </view>
+  <view class="pill cel peb {{busy ? 'is-disabled' : ''}}" hover-class="hover" bindtap="submitAdd">{{busy ? '正在补录' : '补录'}}</view>
+</app-sheet>
+
+<!-- 导出 -->
+<app-sheet show="{{exportSheet}}" locked="{{exportStage === 'making'}}" bind:close="closeExport">
+  <block wx:if="{{exportStage === 'choose'}}">
+    <text class="h3">导出签到记录</text>
+    <view class="opts">
+      <view class="opt peb3 {{courseId ? '' : 'dim'}}" data-scope="course" bindtap="pickScope">
+        <view class="radio {{exportScope === 'course' ? 'on' : ''}}"></view>
+        <view class="opt-text">
+          <text class="opt-t">当前课程</text>
+          <text class="note">{{courseId ? '只导出上方选中的课程' : '先在上方选一门课程'}}</text>
+        </view>
+      </view>
+      <view class="opt peb4" data-scope="all" bindtap="pickScope">
+        <view class="radio {{exportScope === 'all' ? 'on' : ''}}"></view>
+        <view class="opt-text">
+          <text class="opt-t">全部课程</text>
+          <text class="note">按课程、签到时间排序</text>
+        </view>
+      </view>
+    </view>
+    <text class="sub">表格包含课程、班级、学号、姓名、签到时间、距离和来源，已删除的记录不导出。</text>
+    <view class="pill ink peb" hover-class="hover" bindtap="makeExport"><ic name="download" size="34" />生成 Excel</view>
+  </block>
+  <block wx:elif="{{exportStage === 'making'}}">
+    <text class="h3">正在生成</text>
+    <text class="sub">云函数正在整理记录并写入表格。</text>
+    <view class="progress"><view class="progress-bar"></view></view>
+  </block>
+  <block wx:else>
+    <text class="h3">已生成</text>
+    <view class="file peb3">
+      <view class="file-ic"><ic name="file" size="44" /></view>
+      <view class="opt-text">
+        <text class="opt-t">{{exportFile.fileName}}</text>
+        <text class="note"><text class="num">{{exportFile.count}}</text> 条记录</text>
+      </view>
+    </view>
+    <text class="sub">打开后可以用右上角菜单转发给自己或保存到手机。</text>
+    <view class="pill ink peb" hover-class="hover" bindtap="openExportFile">打开文件</view>
+  </block>
+</app-sheet>

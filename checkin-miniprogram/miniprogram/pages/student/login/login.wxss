@@ -1,0 +1,17 @@
+.head { padding-top: 36rpx; }
+.form { margin-top: 68rpx; display: flex; flex-direction: column; gap: 36rpx; }
+.err-row { display: flex; gap: 14rpx; align-items: flex-start; color: var(--rouge); }
+.err-ic { margin-top: 2rpx; flex: none; }
+
+.foot { display: flex; align-items: center; justify-content: flex-end; gap: 28rpx; padding-top: 24rpx; }
+.go {
+  width: 152rpx; height: 152rpx; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--celadon); color: var(--white);
+  transition: transform 0.18s cubic-bezier(0.3, 1.5, 0.5, 1), background 0.25s, color 0.25s;
+}
+.go.pressed { transform: scale(0.92); }
+.go.off { background: var(--mist-2); color: var(--ink-3); }
+.go.busy { background: var(--celadon); }
+.spin { width: 48rpx; height: 48rpx; border-radius: 50%; border: 6rpx solid rgba(255, 255, 255, 0.3); border-top-color: var(--white); animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

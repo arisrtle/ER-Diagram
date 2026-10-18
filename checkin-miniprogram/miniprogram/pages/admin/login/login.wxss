@@ -1,0 +1,18 @@
+.head { padding-top: 36rpx; }
+.center { display: flex; align-items: center; justify-content: center; }
+.foot { display: flex; flex-direction: column; gap: 32rpx; padding-top: 24rpx; }
+.big-btn { height: 128rpx; font-size: 34rpx; }
+
+.badge-ring { width: 336rpx; height: 336rpx; border-radius: 50%; border: 3rpx solid var(--line); display: flex; align-items: center; justify-content: center; }
+.badge {
+  width: 184rpx; height: 184rpx; display: flex; align-items: center; justify-content: center;
+  background: var(--celadon); color: var(--white);
+  border-radius: 92rpx 76rpx 88rpx 72rpx / 80rpx 92rpx 76rpx 88rpx;
+}
+
+.wait { display: flex; flex-direction: column; align-items: center; gap: 24rpx; text-align: center; padding: 0 72rpx; }
+.wait-ring { width: 240rpx; height: 240rpx; border-radius: 50%; border: 4rpx dashed var(--celadon); display: flex; align-items: center; justify-content: center; animation: turn 12s linear infinite; }
+.wait-dot { width: 32rpx; height: 32rpx; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 8rpx var(--white); }
+@keyframes turn { to { transform: rotate(360deg); } }
+
+.spin { width: 40rpx; height: 40rpx; border-radius: 50%; border: 5rpx solid rgba(255, 255, 255, 0.3); border-top-color: var(--white); animation: turn 0.8s linear infinite; }

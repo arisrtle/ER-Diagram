@@ -1,0 +1,15 @@
+.root { position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 500; }
+.scrim { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: rgba(19, 49, 46, 0.38); opacity: 0; transition: opacity 0.28s; }
+.panel {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  max-height: 88vh; overflow-y: auto;
+  background: var(--mist);
+  padding: 20rpx 44rpx calc(env(safe-area-inset-bottom) + 48rpx);
+  border-radius: 68rpx 68rpx 0 0;
+  display: flex; flex-direction: column; gap: 32rpx;
+  transform: translateY(105%);
+  transition: transform 0.36s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+.on .scrim { opacity: 1; }
+.on .panel { transform: translateY(0); }
+.grab { width: 80rpx; height: 10rpx; border-radius: 6rpx; background: var(--line); align-self: center; flex: none; }

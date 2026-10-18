@@ -1,0 +1,42 @@
+<view class="screen home">
+  <!-- 背景：签到范围的同心圆，一圈波纹缓慢扩散，黑点是「你」 -->
+  <view class="ripple" aria-hidden="true">
+    <view class="r r4"></view>
+    <view class="r r3"></view>
+    <view class="r r2"></view>
+    <view class="r pulse"></view>
+    <view class="r r1"></view>
+    <view class="pin"></view>
+    <view class="me"></view>
+  </view>
+
+  <view class="mark display" style="margin-top: {{statusBar + 56}}px;">
+    <view class="mark-dot"></view>
+    <text>课堂签到</text>
+  </view>
+
+  <view class="grow"></view>
+
+  <view class="copy pad">
+    <view class="h1">在教室范围内</view>
+    <view class="h1">用手机签到</view>
+    <view class="sub copy-sub">学生用学号和姓名登录；老师和助教用微信登录后管理课程与记录。</view>
+  </view>
+
+  <view class="choices safe-bottom">
+    <view class="choice stu peb" hover-class="pressed" bindtap="toStudent" aria-role="button">
+      <view class="choice-text">
+        <text class="t display">我是学生</text>
+        <text class="d">学号 + 姓名登录，定位签到</text>
+      </view>
+      <view class="arr"><ic name="arrow" size="44" /></view>
+    </view>
+    <view class="choice adm peb2" hover-class="pressed" bindtap="toAdmin" aria-role="button">
+      <view class="choice-text">
+        <text class="t display">我是管理员</text>
+        <text class="d">微信授权登录，管理课程、学生、记录</text>
+      </view>
+      <view class="arr"><ic name="arrow" size="36" /></view>
+    </view>
+  </view>
+</view>

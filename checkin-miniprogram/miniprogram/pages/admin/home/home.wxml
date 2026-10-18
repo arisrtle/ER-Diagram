@@ -1,0 +1,48 @@
+<view class="screen">
+  <nav-bar back />
+
+  <view class="ahead">
+    <text class="h1 ahead-title">{{title}}</text>
+    <text class="ahead-count num">{{counts[tab]}}</text>
+    <view class="avatar" hover-class="pressed" bindtap="openAdmins" aria-role="button" aria-label="管理员">
+      <text class="av-t">{{me ? me.initial : '管'}}</text>
+      <view wx:if="{{pending}}" class="badge num">{{pending}}</view>
+    </view>
+  </view>
+
+  <!-- 三个面板：访问过的保留在页面里，切换时只是显示 / 隐藏，保留滚动位置和筛选 -->
+  <view class="grow">
+    <view class="pane {{tab === 'courses' ? '' : 'off'}}"><course-pane id="courses" bind:count="onCount" /></view>
+    <view wx:if="{{visited.students}}" class="pane {{tab === 'students' ? '' : 'off'}}"><student-pane id="students" bind:count="onCount" /></view>
+    <view wx:if="{{visited.records}}" class="pane {{tab === 'records' ? '' : 'off'}}"><record-pane id="records" bind:count="onCount" /></view>
+  </view>
+
+  <!-- 底部切换 -->
+  <view class="dock">
+    <view class="dock-btn {{tab === 'courses' ? 'on' : ''}}" data-tab="courses" bindtap="switchTab"><ic name="book" size="36" /><text>课程</text></view>
+    <view class="dock-btn {{tab === 'students' ? 'on' : ''}}" data-tab="students" bindtap="switchTab"><ic name="people" size="36" /><text>学生</text></view>
+    <view class="dock-btn {{tab === 'records' ? 'on' : ''}}" data-tab="records" bindtap="switchTab"><ic name="list" size="36" /><text>记录</text></view>
+  </view>
+
+  <!-- 管理员与审核 -->
+  <app-sheet show="{{adminSheet}}" bind:close="closeAdmins">
+    <text class="h3">管理员</text>
+    <view class="admins">
+      <view wx:for="{{admins}}" wx:key="id" class="arow">
+        <view class="av {{item.status === 'pending' ? 'p' : ''}}">{{item.initial}}</view>
+        <view class="arow-text">
+          <text class="arow-name">{{item.nickname}}{{item.me ? '（你）' : ''}}</text>
+          <text class="note">{{item.status === 'pending' ? '申请成为管理员' : '已启用'}}　尾号 <text class="num">{{item.tail}}</text></text>
+        </view>
+        <view wx:if="{{item.status === 'pending'}}" class="acts">
+          <view class="pill sm cel peb3 {{reviewing ? 'is-disabled' : ''}}" hover-class="hover" data-id="{{item.id}}" data-approve="1" bindtap="review">通过</view>
+          <view class="pill sm soft peb4 {{reviewing ? 'is-disabled' : ''}}" hover-class="hover" data-id="{{item.id}}" data-approve="0" bindtap="review">拒绝</view>
+        </view>
+      </view>
+    </view>
+    <text class="note">新的管理员在首页选择「我是管理员」并提交申请后，会出现在这里。</text>
+    <view class="pill soft peb" hover-class="hover" bindtap="closeAdmins">关闭</view>
+  </app-sheet>
+
+  <app-toast id="toast" />
+</view>

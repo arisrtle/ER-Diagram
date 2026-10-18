@@ -1,0 +1,35 @@
+/*
+ * 进度环用两个半圆遮罩实现：右半边先转满，左半边接着转满，合起来就是从 12 点方向顺时针走一圈。
+ * 每个 .bar 只有两条边框着色（各 90°），初始角度把着色弧藏在遮罩外，结束角度转进遮罩内。
+ */
+.hold { position: relative; width: 296rpx; height: 296rpx; border-radius: 50%; }
+.track { position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 50%; border: 10rpx solid var(--mist-2); }
+.half { position: absolute; top: 0; width: 148rpx; height: 296rpx; overflow: hidden; }
+.half.r { right: 0; }
+.half.l { left: 0; }
+.bar {
+  position: absolute; top: 0; width: 296rpx; height: 296rpx; border-radius: 50%;
+  border: 10rpx solid transparent; box-sizing: border-box;
+  transform: rotate(-135deg);
+}
+.r .bar { left: -148rpx; border-top-color: var(--ink); border-right-color: var(--ink); }
+.l .bar { left: 0; border-bottom-color: var(--ink); border-left-color: var(--ink); }
+.holding .r .bar { animation: fill var(--half) linear forwards; }
+.holding .l .bar { animation: fill var(--half) linear var(--half) forwards; }
+@keyframes fill { from { transform: rotate(-135deg); } to { transform: rotate(45deg); } }
+
+.face {
+  position: absolute; left: 28rpx; top: 28rpx; right: 28rpx; bottom: 28rpx; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6rpx;
+  transition: transform 0.28s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+.t { font-family: var(--f-display); font-size: 50rpx; line-height: 1; }
+.s { font-size: 23rpx; }
+
+.ready .face { background: var(--gold); color: var(--ink); box-shadow: 0 28rpx 60rpx -28rpx rgba(160, 120, 0, 0.85); }
+.ready.holding .face { transform: scale(0.92); }
+.off .face { background: var(--mist-2); color: var(--ink-3); }
+.busy .face { background: var(--gold-soft); color: var(--gold-ink); }
+.busy .t { font-size: 40rpx; }
+.spin { width: 40rpx; height: 40rpx; border-radius: 50%; border: 5rpx solid rgba(110, 83, 0, 0.25); border-top-color: var(--gold-ink); animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -1,0 +1,43 @@
+<scroll-view
+  class="scroll"
+  scroll-y
+  refresher-enabled
+  refresher-background="#E9EFEC"
+  refresher-triggered="{{refreshing}}"
+  bindrefresherrefresh="onRefresh"
+>
+  <view wx:if="{{loading}}" class="center"><view class="loading-dot"></view></view>
+
+  <view wx:elif="{{error && !list.length}}" class="empty">
+    <view class="ring"><view class="dot"></view></view>
+    <text class="sub">{{error}}</text>
+    <view class="pill soft sm peb" hover-class="hover" bindtap="load">重新加载</view>
+  </view>
+
+  <view wx:elif="{{!list.length}}" class="empty">
+    <view class="ring"><view class="dot"></view></view>
+    <text class="h3">还没有课程</text>
+    <text class="sub">新建一门课程，在地图上选好签到点位，学生就能看到并签到。建议每节课建一条，例如「数据库原理 第 5 周」。</text>
+    <view class="pill cel peb" hover-class="hover" bindtap="add"><ic name="plus" size="36" />新增课程</view>
+  </view>
+
+  <block wx:else>
+    <text class="sub tip">圆圈里的数字是签到范围（米）。点课程可以修改点位和范围。</text>
+    <view class="list">
+      <view wx:for="{{list}}" wx:key="id" class="row peb3" hover-class="pressed" data-id="{{item.id}}" bindtap="open">
+        <view class="glyph"><text class="num">{{item.radius}}</text></view>
+        <view class="mid">
+          <text class="name">{{item.name}}</text>
+          <view class="addr"><ic name="pin" size="24" /><text class="addr-t">{{item.address || '已设置点位'}}</text></view>
+        </view>
+        <view class="cnt">
+          <text class="cnt-n num">{{item.checkinCount}}</text>
+          <text class="cnt-l">人已签到</text>
+        </view>
+      </view>
+    </view>
+    <view class="bottom-space"></view>
+  </block>
+</scroll-view>
+
+<view wx:if="{{!loading && list.length}}" class="fab peb" hover-class="pressed" bindtap="add"><ic name="plus" size="40" /><text>新增课程</text></view>

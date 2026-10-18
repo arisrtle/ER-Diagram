@@ -1,0 +1,15 @@
+.toast {
+  position: fixed; left: 50%; z-index: 999;
+  display: flex; align-items: center; gap: 14rpx;
+  max-width: 640rpx; padding: 24rpx 36rpx;
+  background: var(--ink); color: var(--white);
+  font-size: 28rpx; font-weight: 500; line-height: 1.4;
+  border-radius: 44rpx 32rpx 40rpx 28rpx / 36rpx 44rpx 32rpx 40rpx;
+  opacity: 0; pointer-events: none;
+  transform: translate(-50%, -24rpx) scale(0.96);
+  transition: opacity 0.2s, transform 0.32s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.dot { width: 14rpx; height: 14rpx; border-radius: 50%; flex: none; background: var(--gold); }
+.toast.error .dot { background: var(--rouge); }
+.toast.success .dot { background: var(--gold); box-shadow: 0 0 0 6rpx rgba(242, 183, 5, 0.3); }

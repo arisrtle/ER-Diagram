@@ -1,0 +1,32 @@
+{
+  "description": "课堂签到：微信小程序定位签到系统（微信云开发）",
+  "projectname": "checkin-miniprogram",
+  "appid": "wx0000000000000000",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "compileType": "miniprogram",
+  "libVersion": "3.4.0",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "showShadowRootInWxmlPanel": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": true,
+    "packNpmManually": false,
+    "ignoreUploadUnusedFiles": true
+  },
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

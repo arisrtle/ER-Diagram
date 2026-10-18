@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "course-pane": "/components/course-pane/course-pane",
+    "student-pane": "/components/student-pane/student-pane",
+    "record-pane": "/components/record-pane/record-pane"
+  }
+}

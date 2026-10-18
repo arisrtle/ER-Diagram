@@ -1,0 +1,4 @@
+{
+  "desc": "签到小程序不需要被微信搜索收录",
+  "rules": [{ "action": "disallow", "page": "*" }]
+}

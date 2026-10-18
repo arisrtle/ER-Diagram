@@ -1,0 +1,32 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/student/login/login",
+    "pages/student/checkin/checkin",
+    "pages/admin/login/login",
+    "pages/admin/home/home",
+    "pages/admin/course-edit/course-edit"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#E9EFEC",
+    "backgroundColor": "#E9EFEC",
+    "backgroundTextStyle": "dark"
+  },
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "app-toast": "/components/toast/toast",
+    "app-sheet": "/components/sheet/sheet",
+    "ic": "/components/ic/ic"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于判断你是否在课程的签到范围内"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation", "chooseLocation"],
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

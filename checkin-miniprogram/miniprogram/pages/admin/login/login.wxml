@@ -1,0 +1,56 @@
+<view class="screen">
+  <nav-bar back />
+
+  <!-- 登录 -->
+  <block wx:if="{{view === 'login'}}">
+    <view class="pad head">
+      <view class="h1">管理员登录</view>
+      <view class="sub" style="margin-top: 16rpx;">用当前微信的身份进入管理后台，不需要账号密码。</view>
+    </view>
+    <view class="grow center">
+      <view class="badge-ring"><view class="badge"><ic name="chat" size="88" /></view></view>
+    </view>
+    <view class="pad foot safe-bottom">
+      <text class="sub">系统里还没有管理员时，第一个登录的微信会自动成为管理员；之后的人需要提交申请，由已有管理员通过。</text>
+      <view class="pill cel peb big-btn {{loading ? 'is-disabled' : ''}}" hover-class="hover" bindtap="login">
+        <view wx:if="{{loading}}" class="spin"></view>
+        <ic wx:else name="chat" size="40" />
+        <text>微信授权登录</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 申请 -->
+  <block wx:elif="{{view === 'apply'}}">
+    <view class="pad head">
+      <view class="h1">申请成为管理员</view>
+      <view class="sub" style="margin-top: 16rpx;">这个微信还不是管理员。填一个让同事认得出的称呼，提交后等待已有管理员通过。</view>
+    </view>
+    <view class="pad" style="margin-top: 68rpx;">
+      <view class="field">
+        <text class="field-label">称呼</text>
+        <input class="input peb3" type="nickname" placeholder="例如 王老师" placeholder-class="ph" maxlength="20" value="{{applyName}}" bindinput="onName" bindblur="onName" />
+      </view>
+    </view>
+    <view class="grow"></view>
+    <view class="pad foot safe-bottom">
+      <view class="pill ink peb big-btn {{loading ? 'is-disabled' : ''}}" hover-class="hover" bindtap="apply">提交申请</view>
+    </view>
+  </block>
+
+  <!-- 待审核 -->
+  <block wx:else>
+    <view class="grow center">
+      <view class="wait">
+        <view class="wait-ring"><view class="wait-dot"></view></view>
+        <text class="h2">等待审核</text>
+        <text class="sub">{{nickname ? nickname + '，' : ''}}申请已提交。管理员在后台点「通过」后，回到这一页点「刷新状态」就能进入。</text>
+      </view>
+    </view>
+    <view class="pad foot safe-bottom">
+      <view class="pill soft peb big-btn {{loading ? 'is-disabled' : ''}}" hover-class="hover" bindtap="refresh"><ic name="refresh" size="36" />刷新状态</view>
+    </view>
+  </block>
+
+  <app-toast id="toast" />
+</view>

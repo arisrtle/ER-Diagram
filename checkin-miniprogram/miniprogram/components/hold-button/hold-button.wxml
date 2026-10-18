@@ -1,0 +1,18 @@
+<view
+  class="hold {{mode}} {{holding ? 'holding' : ''}}"
+  style="--half: {{duration / 2}}ms;"
+  bindtouchstart="start"
+  bindtouchend="cancel"
+  bindtouchcancel="cancel"
+  aria-role="button"
+  aria-label="{{label}}"
+>
+  <view class="track"></view>
+  <view class="half r"><view class="bar"></view></view>
+  <view class="half l"><view class="bar"></view></view>
+  <view class="face">
+    <view wx:if="{{mode === 'busy'}}" class="spin"></view>
+    <text class="t">{{label}}</text>
+    <text wx:if="{{sub}}" class="s">{{sub}}</text>
+  </view>
+</view>

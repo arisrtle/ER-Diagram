@@ -1,0 +1,9 @@
+<view class="nav" style="padding-top: {{statusBar}}px;">
+  <view class="row" style="height: {{navH}}px; padding-right: {{rightGap}}px;">
+    <view wx:if="{{back}}" class="back peb3" hover-class="pressed" bindtap="onBack" aria-role="button" aria-label="返回">
+      <ic name="back" size="40" />
+    </view>
+    <text wx:if="{{title}}" class="title">{{title}}</text>
+    <slot></slot>
+  </view>
+</view>

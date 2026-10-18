@@ -1,0 +1,43 @@
+.radar { position: relative; margin: 0 auto; }
+.ring {
+  position: absolute; left: 50%; top: 50%; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s, border-color 0.4s;
+}
+.outer { width: 456rpx; height: 456rpx; border: 2rpx solid var(--line); }
+.double { border: 2rpx dashed var(--line); }
+.disk { border: 4rpx solid var(--celadon); background: rgba(47, 125, 109, 0.08); }
+.m-in .disk { background: rgba(242, 183, 5, 0.28); }
+.m-done .disk, .m-used .disk { border-color: var(--ink-3); background: rgba(19, 49, 46, 0.06); }
+.sweep { border: 4rpx solid var(--celadon); animation: sweep 1.8s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
+@keyframes sweep { from { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; } to { transform: translate(-50%, -50%) scale(1.9); opacity: 0; } }
+
+.rlabel {
+  position: absolute; left: 0; right: 0; text-align: center;
+  font-size: 23rpx; font-weight: 600; color: var(--celadon);
+  transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.m-done .rlabel, .m-used .rlabel { color: var(--ink-3); }
+
+.pin {
+  position: absolute; left: 50%; top: 50%; width: 36rpx; height: 36rpx; margin: -18rpx 0 0 -18rpx;
+  border-radius: 50%; background: var(--gold);
+  box-shadow: 0 0 0 8rpx var(--white), 0 0 0 12rpx var(--celadon);
+}
+.line {
+  position: absolute; left: 50%; top: 50%; height: 0;
+  border-top: 3rpx dashed rgba(19, 49, 46, 0.35);
+  transform-origin: 0 0;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.acc {
+  position: absolute; border-radius: 50%; background: rgba(19, 49, 46, 0.1);
+  transform: translate(-50%, -50%);
+  transition: left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.6s, height 0.6s;
+}
+.me {
+  position: absolute; width: 30rpx; height: 30rpx; border-radius: 50%;
+  background: var(--ink); box-shadow: 0 0 0 7rpx var(--white), 0 6rpx 14rpx 6rpx rgba(19, 49, 46, 0.18);
+  transform: translate(-50%, -50%);
+  transition: left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
