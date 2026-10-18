@@ -1,0 +1,3 @@
+[submodule "wechat-attendance-miniprogram"]
+	path = wechat-attendance-miniprogram
+	url = https://github.com/YangMingshan1/wechat-attendance-miniprogram.git
