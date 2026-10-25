@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="720" viewBox="0 0 1240 720" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif">
+  <defs>
+    <clipPath id="clipUsers"><rect x="40" y="230" width="300" height="262" rx="14"/></clipPath>
+    <clipPath id="clipCourses"><rect x="900" y="170" width="300" height="374" rx="14"/></clipPath>
+    <clipPath id="clipRecords"><rect x="430" y="190" width="380" height="318" rx="14"/></clipPath>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <rect width="1240" height="720" fill="#F5F7FB"/>
+
+  <!-- 标题 -->
+  <text x="40" y="56" font-size="22" font-weight="700" fill="#0F172A" letter-spacing="0.5">课程签到 · ER 图（三张表）</text>
+  <text x="40" y="82" font-size="12.5" fill="#64748B">教师 / 管理员是 USERS 的角色，不单独建表；设备与课次不建表，作为字段存在于签到记录中</text>
+  <text x="40" y="104" font-size="12" fill="#2563EB">西安交通大学 · 课程签到 v2</text>
+
+  <!-- 关系线：USERS -> COURSES（授课） -->
+  <path d="M190,230 C190,128 1050,110 1050,170" fill="none" stroke="#93B4F8" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <rect x="562" y="126" width="116" height="24" rx="12" fill="#EEF4FF"/>
+  <text x="620" y="142" font-size="11.5" fill="#1D4ED8" text-anchor="middle">授课　1 : N</text>
+
+  <!-- 关系线：USERS -> SIGN_RECORDS -->
+  <path d="M340,352 L430,352" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+  <circle cx="342" cy="352" r="3" fill="#2563EB"/>
+  <path d="M430,352 L418,345 M430,352 L418,352 M430,352 L418,359" fill="none" stroke="#2563EB" stroke-width="1.6"/>
+  <rect x="349" y="316" width="72" height="22" rx="11" fill="#EEF4FF"/>
+  <text x="385" y="331" font-size="10.5" fill="#1D4ED8" text-anchor="middle">签到 1:N</text>
+
+  <!-- 关系线：COURSES -> SIGN_RECORDS -->
+  <path d="M900,352 L810,352" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+  <circle cx="898" cy="352" r="3" fill="#2563EB"/>
+  <path d="M810,352 L822,345 M810,352 L822,352 M810,352 L822,359" fill="none" stroke="#2563EB" stroke-width="1.6"/>
+  <rect x="814" y="316" width="82" height="22" rx="11" fill="#EEF4FF"/>
+  <text x="855" y="331" font-size="10.5" fill="#1D4ED8" text-anchor="middle">被签到 1:N</text>
+
+  <!-- ================= USERS ================= -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="230" width="300" height="262" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+  </g>
+  <g clip-path="url(#clipUsers)">
+    <rect x="40" y="230" width="300" height="48" fill="#EEF4FF"/>
+    <rect x="40" y="276" width="300" height="2" fill="#DBEAFE"/>
+  </g>
+  <text x="58" y="252" font-size="13.5" font-weight="700" fill="#1D4ED8">USERS</text>
+  <text x="118" y="252" font-size="11" fill="#60A5FA">用户表</text>
+  <text x="322" y="252" font-size="10" fill="#64748B" text-anchor="end">学生 / 教师 / 管理员</text>
+
+  <text x="58" y="302" font-size="11.5" font-weight="600" fill="#0F172A">_id</text>
+  <rect x="86" y="290" width="30" height="16" rx="8" fill="#FEF3C7"/>
+  <text x="101" y="301" font-size="9" fill="#92400E" text-anchor="middle">PK</text>
+  <text x="322" y="302" font-size="10" fill="#94A3B8" text-anchor="end">主键</text>
+
+  <text x="58" y="330" font-size="11.5" fill="#334155">account</text>
+  <rect x="112" y="318" width="30" height="16" rx="8" fill="#DCFCE7"/>
+  <text x="127" y="329" font-size="9" fill="#166534" text-anchor="middle">UK</text>
+  <text x="322" y="330" font-size="10" fill="#94A3B8" text-anchor="end">学号 / 工号</text>
+
+  <text x="58" y="358" font-size="11.5" fill="#334155">password</text>
+  <text x="322" y="358" font-size="10" fill="#94A3B8" text-anchor="end">PBKDF2 哈希</text>
+
+  <text x="58" y="386" font-size="11.5" fill="#334155">name</text>
+  <text x="322" y="386" font-size="10" fill="#94A3B8" text-anchor="end">姓名</text>
+
+  <text x="58" y="414" font-size="11.5" fill="#334155">role</text>
+  <text x="322" y="414" font-size="10" fill="#94A3B8" text-anchor="end">student / teacher / admin</text>
+
+  <text x="58" y="442" font-size="11.5" fill="#334155">className</text>
+  <text x="322" y="442" font-size="10" fill="#94A3B8" text-anchor="end">班级 / 院系</text>
+
+  <text x="58" y="470" font-size="11.5" fill="#334155">status</text>
+  <text x="322" y="470" font-size="10" fill="#94A3B8" text-anchor="end">1 正常 / 0 停用</text>
+
+  <!-- ================= SIGN_RECORDS ================= -->
+  <g filter="url(#shadow)">
+    <rect x="430" y="190" width="380" height="318" rx="14" fill="#FFFFFF" stroke="#BFD5FF" stroke-width="1.6"/>
+  </g>
+  <g clip-path="url(#clipRecords)">
+    <rect x="430" y="190" width="380" height="48" fill="#2563EB"/>
+  </g>
+  <text x="448" y="212" font-size="13.5" font-weight="700" fill="#FFFFFF">SIGN_RECORDS</text>
+  <text x="566" y="212" font-size="11" fill="#BFDBFE">签到记录表</text>
+  <text x="792" y="212" font-size="10" fill="#DBEAFE" text-anchor="end">核心业务数据</text>
+
+  <text x="448" y="262" font-size="11.5" font-weight="600" fill="#0F172A">_id</text>
+  <rect x="476" y="250" width="30" height="16" rx="8" fill="#FEF3C7"/>
+  <text x="491" y="261" font-size="9" fill="#92400E" text-anchor="middle">PK</text>
+  <text x="792" y="262" font-size="10" fill="#94A3B8" text-anchor="end">主键</text>
+
+  <text x="448" y="290" font-size="11.5" fill="#334155">userId</text>
+  <rect x="492" y="278" width="30" height="16" rx="8" fill="#E0E7FF"/>
+  <text x="507" y="289" font-size="9" fill="#3730A3" text-anchor="middle">FK</text>
+  <text x="792" y="290" font-size="10" fill="#94A3B8" text-anchor="end">→ USERS._id</text>
+
+  <text x="448" y="318" font-size="11.5" fill="#334155">courseId</text>
+  <rect x="504" y="306" width="30" height="16" rx="8" fill="#E0E7FF"/>
+  <text x="519" y="317" font-size="9" fill="#3730A3" text-anchor="middle">FK</text>
+  <text x="792" y="318" font-size="10" fill="#94A3B8" text-anchor="end">→ COURSES._id</text>
+
+  <text x="448" y="346" font-size="11.5" font-weight="600" fill="#1D4ED8">sessionDate</text>
+  <rect x="534" y="334" width="30" height="16" rx="8" fill="#DBEAFE"/>
+  <text x="549" y="345" font-size="9" fill="#1E40AF" text-anchor="middle">UK</text>
+  <text x="792" y="346" font-size="10" fill="#1D4ED8" text-anchor="end">课次日期 YYYY-MM-DD</text>
+
+  <text x="448" y="374" font-size="11.5" fill="#334155">signTime</text>
+  <text x="792" y="374" font-size="10" fill="#94A3B8" text-anchor="end">签到时间</text>
+
+  <text x="448" y="402" font-size="11.5" fill="#334155">result</text>
+  <text x="792" y="402" font-size="10" fill="#94A3B8" text-anchor="end">签到结果</text>
+
+  <text x="448" y="430" font-size="11.5" fill="#334155">distance</text>
+  <text x="792" y="430" font-size="10" fill="#94A3B8" text-anchor="end">云端计算的距离（米）</text>
+
+  <text x="448" y="458" font-size="11.5" fill="#334155">latitude / longitude</text>
+  <text x="792" y="458" font-size="10" fill="#94A3B8" text-anchor="end">上报坐标</text>
+
+  <text x="448" y="486" font-size="11.5" fill="#334155">deviceId</text>
+  <text x="792" y="486" font-size="10" fill="#94A3B8" text-anchor="end">仅审计，不参与判定</text>
+
+  <!-- 唯一索引说明 -->
+  <rect x="430" y="524" width="380" height="54" rx="12" fill="#FFF7ED" stroke="#FED7AA"/>
+  <text x="446" y="545" font-size="11" font-weight="600" fill="#9A3412">唯一索引 uk_user_course_session</text>
+  <text x="446" y="563" font-size="10.5" fill="#B45309">userId + courseId + sessionDate → 一人一课一节只能签一次</text>
+
+  <!-- ================= COURSES ================= -->
+  <g filter="url(#shadow)">
+    <rect x="900" y="170" width="300" height="374" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+  </g>
+  <g clip-path="url(#clipCourses)">
+    <rect x="900" y="170" width="300" height="48" fill="#EEF4FF"/>
+    <rect x="900" y="216" width="300" height="2" fill="#DBEAFE"/>
+  </g>
+  <text x="918" y="192" font-size="13.5" font-weight="700" fill="#1D4ED8">COURSES</text>
+  <text x="986" y="192" font-size="11" fill="#60A5FA">课程表</text>
+  <text x="1182" y="192" font-size="10" fill="#64748B" text-anchor="end">周课表 · 单点位</text>
+
+  <text x="918" y="242" font-size="11.5" font-weight="600" fill="#0F172A">_id</text>
+  <rect x="946" y="230" width="30" height="16" rx="8" fill="#FEF3C7"/>
+  <text x="961" y="241" font-size="9" fill="#92400E" text-anchor="middle">PK</text>
+
+  <text x="918" y="270" font-size="11.5" fill="#334155">name</text>
+  <text x="1182" y="270" font-size="10" fill="#94A3B8" text-anchor="end">课程名称</text>
+
+  <text x="918" y="298" font-size="11.5" fill="#334155">teacherId</text>
+  <rect x="972" y="286" width="30" height="16" rx="8" fill="#E0E7FF"/>
+  <text x="987" y="297" font-size="9" fill="#3730A3" text-anchor="middle">FK</text>
+  <text x="1182" y="298" font-size="10" fill="#94A3B8" text-anchor="end">→ USERS._id</text>
+
+  <text x="918" y="326" font-size="11.5" fill="#334155">teacherName</text>
+  <text x="1182" y="326" font-size="10" fill="#94A3B8" text-anchor="end">冗余快照</text>
+
+  <text x="918" y="354" font-size="11.5" fill="#334155">weekday</text>
+  <text x="1182" y="354" font-size="10" fill="#94A3B8" text-anchor="end">1–7（周一至周日）</text>
+
+  <text x="918" y="382" font-size="11.5" fill="#334155">startTime / endTime</text>
+  <text x="1182" y="382" font-size="10" fill="#94A3B8" text-anchor="end">HH:mm</text>
+
+  <text x="918" y="410" font-size="11.5" fill="#334155">locationName</text>
+  <text x="1182" y="410" font-size="10" fill="#94A3B8" text-anchor="end">点位名称</text>
+
+  <text x="918" y="438" font-size="11.5" font-weight="600" fill="#1D4ED8">latitude / longitude</text>
+  <text x="1182" y="438" font-size="10" fill="#1D4ED8" text-anchor="end">标量 · 无法多点位</text>
+
+  <text x="918" y="466" font-size="11.5" fill="#334155">radius</text>
+  <text x="1182" y="466" font-size="10" fill="#94A3B8" text-anchor="end">默认 50 米</text>
+
+  <text x="918" y="494" font-size="11.5" fill="#334155">status</text>
+  <text x="1182" y="494" font-size="10" fill="#94A3B8" text-anchor="end">1 启用 / 0 停用</text>
+
+  <text x="918" y="522" font-size="11.5" fill="#334155">createTime / updateTime</text>
+
+  <!-- 图例 -->
+  <rect x="40" y="512" width="300" height="136" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="58" y="536" font-size="11.5" font-weight="600" fill="#0F172A">图例</text>
+  <rect x="58" y="548" width="30" height="16" rx="8" fill="#FEF3C7"/>
+  <text x="73" y="559" font-size="9" fill="#92400E" text-anchor="middle">PK</text>
+  <text x="96" y="560" font-size="10.5" fill="#64748B">主键</text>
+  <rect x="140" y="548" width="30" height="16" rx="8" fill="#E0E7FF"/>
+  <text x="155" y="559" font-size="9" fill="#3730A3" text-anchor="middle">FK</text>
+  <text x="178" y="560" font-size="10.5" fill="#64748B">逻辑外键</text>
+  <rect x="248" y="548" width="30" height="16" rx="8" fill="#DCFCE7"/>
+  <text x="263" y="559" font-size="9" fill="#166534" text-anchor="middle">UK</text>
+  <text x="286" y="560" font-size="10.5" fill="#64748B">唯一</text>
+  <text x="58" y="588" font-size="10.5" fill="#64748B">1 : N　一个用户可有多条签到记录</text>
+  <text x="58" y="610" font-size="10.5" fill="#64748B">M : N（约束为每课次 1 : 1）</text>
+  <text x="58" y="630" font-size="10.5" fill="#64748B">同一人同一节课只能签一次</text>
+
+  <!-- 底部说明 -->
+  <text x="900" y="580" font-size="10.5" fill="#64748B">课次不建表：courses 存「星期几 + 起止时间」</text>
+  <text x="900" y="598" font-size="10.5" fill="#64748B">表达周课表，每次上课用 sessionDate 区分，</text>
+  <text x="900" y="616" font-size="10.5" fill="#64748B">因此仍然只有三张表。</text>
+  <text x="900" y="644" font-size="10.5" fill="#94A3B8">教师 = USERS.role='teacher'</text>
+  <text x="900" y="662" font-size="10.5" fill="#94A3B8">管理员 = USERS.role='admin'</text>
+</svg>

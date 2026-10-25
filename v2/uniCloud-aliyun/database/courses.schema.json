@@ -1,0 +1,84 @@
+{
+  "bsonType": "object",
+  "required": ["name", "teacherId", "weekday", "startTime", "endTime", "latitude", "longitude"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "课程主键"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "课程名称",
+      "maxLength": 30
+    },
+    "teacherId": {
+      "bsonType": "string",
+      "title": "授课教师",
+      "description": "逻辑外键 -> users._id（role=teacher）。一门课只有一个授课教师，结构上不支持多教师",
+      "foreignKey": "users._id"
+    },
+    "teacherName": {
+      "bsonType": "string",
+      "title": "教师姓名",
+      "description": "冗余快照，避免列表查询时回查 users"
+    },
+    "weekday": {
+      "bsonType": "int",
+      "title": "上课星期",
+      "description": "1=周一 … 7=周日。周课表模型，不额外建课次表",
+      "enum": [1, 2, 3, 4, 5, 6, 7]
+    },
+    "startTime": {
+      "bsonType": "string",
+      "title": "上课时间",
+      "description": "HH:mm，如 08:00"
+    },
+    "endTime": {
+      "bsonType": "string",
+      "title": "下课时间",
+      "description": "HH:mm，必须晚于 startTime"
+    },
+    "locationName": {
+      "bsonType": "string",
+      "title": "签到点位名称",
+      "description": "如「教二楼 301」",
+      "maxLength": 40
+    },
+    "latitude": {
+      "bsonType": "double",
+      "title": "点位纬度",
+      "description": "标量字段。一门课只有一个点位，结构上无法表达多点位"
+    },
+    "longitude": {
+      "bsonType": "double",
+      "title": "点位经度",
+      "description": "标量字段"
+    },
+    "radius": {
+      "bsonType": "int",
+      "title": "距离阈值",
+      "description": "单位米，默认 50，允许 10~1000",
+      "defaultValue": 50
+    },
+    "status": {
+      "bsonType": "int",
+      "title": "状态",
+      "description": "1=启用 0=停用。停用后学生端不再展示",
+      "defaultValue": 1,
+      "enum": [0, 1]
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updateTime": {
+      "bsonType": "timestamp",
+      "title": "最后修改时间"
+    }
+  }
+}

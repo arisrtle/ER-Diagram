@@ -1,0 +1,76 @@
+{
+  "bsonType": "object",
+  "required": ["account", "password", "name", "role"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "用户主键，系统自动生成"
+    },
+    "account": {
+      "bsonType": "string",
+      "title": "账号",
+      "description": "学号或工号，全局唯一，登录凭证",
+      "trim": "both",
+      "minLength": 4,
+      "maxLength": 20
+    },
+    "password": {
+      "bsonType": "string",
+      "title": "密码",
+      "description": "PBKDF2-SHA256 哈希，格式 salt:hash，不存明文",
+      "trim": "none"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "姓名",
+      "minLength": 1,
+      "maxLength": 20
+    },
+    "role": {
+      "bsonType": "string",
+      "title": "角色",
+      "description": "student=学生 teacher=教师 admin=管理员。教师是用户角色，不单独建表",
+      "enum": ["student", "teacher", "admin"]
+    },
+    "className": {
+      "bsonType": "string",
+      "title": "班级",
+      "description": "学生所属班级；教师此字段存所属院系",
+      "maxLength": 40
+    },
+    "title": {
+      "bsonType": "string",
+      "title": "职称",
+      "description": "教师职称，如教授 / 副教授 / 讲师",
+      "maxLength": 20
+    },
+    "phone": {
+      "bsonType": "string",
+      "title": "手机号",
+      "description": "可选，用于后续短信验证码增强",
+      "maxLength": 20
+    },
+    "email": {
+      "bsonType": "string",
+      "title": "邮箱",
+      "description": "可选，用于后续邮箱验证码增强",
+      "maxLength": 60
+    },
+    "status": {
+      "bsonType": "int",
+      "title": "状态",
+      "description": "1=正常 0=停用",
+      "defaultValue": 1,
+      "enum": [0, 1]
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  }
+}

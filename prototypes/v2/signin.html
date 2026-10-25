@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程签到 · 签到页原型（四态）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: #eef2f8;
+    color: #0f172a;
+    padding: 48px 32px 64px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .head { max-width: 1180px; margin: 0 auto 36px; }
+  .kicker {
+    display: inline-block; font-size: 12px; letter-spacing: 2px; color: #2563eb;
+    background: #e6efff; border-radius: 999px; padding: 5px 12px; margin-bottom: 14px;
+  }
+  h1 { font-size: 30px; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .sub { font-size: 14px; color: #64748b; line-height: 1.7; max-width: 760px; }
+  .sub b { color: #0f172a; font-weight: 600; }
+
+  .board {
+    max-width: 1180px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+  }
+  .unit { display: flex; flex-direction: column; gap: 14px; }
+
+  .phone {
+    width: 100%; aspect-ratio: 375 / 760;
+    background: #f5f7fb; border-radius: 34px; padding: 9px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, .14), 0 0 0 1px rgba(15, 23, 42, .04);
+    position: relative; overflow: hidden;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 27px; overflow: hidden;
+    background: linear-gradient(180deg, #eef4ff 0%, #f5f7fb 36%, #f5f7fb 100%);
+    display: flex; flex-direction: column; padding: 0 16px 14px;
+    position: relative;
+  }
+  .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 92px; height: 20px; background: #0f172a; border-radius: 0 0 14px 14px; z-index: 3;
+  }
+  .statusbar {
+    height: 30px; display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 6px 0; font-size: 10px; color: #475569; font-weight: 600;
+  }
+  .statusbar .icons { letter-spacing: 1px; font-size: 9px; color: #64748b; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; height: 42px; margin-top: 4px; }
+  .brand { display: flex; align-items: center; gap: 7px; }
+  .logo {
+    width: 27px; height: 27px; border-radius: 9px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 13px; font-weight: 700;
+  }
+  .brand-name { font-size: 12.5px; font-weight: 700; letter-spacing: .4px; }
+  .brand-sub { font-size: 8px; color: #94a3b8; margin-top: 1px; }
+  .user {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,.8); border: 1px solid #e8edf5;
+    border-radius: 999px; padding: 3px 9px;
+  }
+  .user-name { font-size: 10px; color: #0f172a; }
+  .user-role { font-size: 8px; color: #2563eb; background: #eaf1ff; border-radius: 999px; padding: 0 5px; }
+
+  .card {
+    background: #fff; border-radius: 16px; padding: 14px 14px 12px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .06); margin-top: 10px;
+  }
+  .card-head { display: flex; align-items: center; justify-content: space-between; }
+  .pill { background: #eaf1ff; border-radius: 999px; padding: 2px 8px; }
+  .pill span { font-size: 8px; color: #2563eb; font-weight: 600; letter-spacing: .4px; }
+  .when { font-size: 8.5px; color: #94a3b8; }
+  .cname { font-size: 18px; font-weight: 700; margin-top: 8px; letter-spacing: .3px; }
+  .meta { display: flex; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #edf1f7; }
+  .meta div { display: flex; flex-direction: column; gap: 1px; }
+  .meta .k { font-size: 7.5px; color: #94a3b8; }
+  .meta .v { font-size: 9.5px; color: #334155; font-weight: 500; }
+
+  .countdown { text-align: center; margin: 20px 0 4px; display: flex; flex-direction: column; gap: 3px; }
+  .cd-main { font-size: 11.5px; color: #475569; }
+  .cd-sub { font-size: 8.5px; color: #94a3b8; }
+
+  .sign { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .ring { width: 176px; height: 176px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
+  .ring.primary::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(37,99,235,.16); }
+  .ring.primary::after { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 1px solid rgba(37,99,235,.09); }
+  .btn {
+    width: 152px; height: 152px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  }
+  .btn .t { font-size: 23px; font-weight: 700; letter-spacing: 4px; margin-left: 4px; }
+  .btn .s { font-size: 8px; letter-spacing: .3px; }
+  .btn.primary { background: linear-gradient(160deg, #4c8dff, #2563eb 46%, #1d4ed8); box-shadow: 0 18px 36px rgba(37,99,235,.32); color: #fff; }
+  .btn.primary .s { color: rgba(255,255,255,.78); }
+  .btn.muted { background: linear-gradient(160deg, #e2e8f0, #cbd5e1); box-shadow: 0 10px 22px rgba(15,23,42,.08); color: #64748b; }
+  .btn.muted .s { color: #94a3b8; }
+  .btn.success { background: linear-gradient(160deg, #34d399, #12b76a); box-shadow: 0 16px 32px rgba(18,183,106,.26); color: #fff; }
+  .btn.success .s { color: rgba(255,255,255,.8); }
+
+  .loc { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 0 4px 4px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
+  .loc.success .dot { background: #12b76a; box-shadow: 0 0 0 3px rgba(18,183,106,.14); }
+  .loc.warn .dot { background: #f79009; box-shadow: 0 0 0 3px rgba(247,144,9,.14); }
+  .loc.muted .dot { background: #94a3b8; }
+  .loc span { font-size: 8.5px; color: #64748b; line-height: 1.5; text-align: center; }
+  .loc.success span { color: #0f9d58; }
+  .loc.warn span { color: #b54708; }
+
+  .footer { display: flex; align-items: center; justify-content: center; gap: 10px; padding-top: 8px; }
+  .footer span { font-size: 8.5px; color: #94a3b8; }
+  .footer i { width: 1px; height: 8px; background: #e2e8f0; }
+
+  .caption { padding: 0 4px; }
+  .caption h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 5px; }
+  .caption p { font-size: 11.5px; color: #64748b; line-height: 1.65; }
+  .tagline { display: inline-block; font-size: 9px; padding: 2px 7px; border-radius: 999px; margin-bottom: 7px; }
+  .t-blue { background: #e6efff; color: #1d4ed8; }
+  .t-gray { background: #eef2f7; color: #64748b; }
+  .t-green { background: #e8f8f0; color: #0f9d58; }
+  .t-orange { background: #fff5e6; color: #b54708; }
+
+  .notes { max-width: 1180px; margin: 46px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .note { background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: 0 6px 20px rgba(15,23,42,.05); }
+  .note h4 { font-size: 12.5px; margin-bottom: 7px; }
+  .note p { font-size: 11.5px; color: #64748b; line-height: 1.75; }
+  .note code { background: #f1f5f9; border-radius: 4px; padding: 1px 4px; font-size: 10.5px; color: #1d4ed8; }
+
+  @media (max-width: 1080px) {
+    .board { grid-template-columns: repeat(2, 1fr); }
+    .notes { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) {
+    body { padding: 28px 16px 40px; }
+    .board { grid-template-columns: 1fr; }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="kicker">交互原型 · 课程签到 v2</div>
+  <h1>一个核心按钮，四种状态</h1>
+  <p class="sub">
+    西安交通大学 · 课程签到。用户打开即自动识别身份，页面只读展示<b>当前课程</b>与<b>倒计时</b>，
+    中间只有一个按钮。是否可签由云端判定：<b>开课前 10 分钟 ~ 下课后 10 分钟</b>、<b>距离点位不超过阈值</b>、<b>本节课未签过</b>。
+  </p>
+</div>
+
+<div class="board">
+
+  <!-- 状态一：可签到 -->
+  <div class="unit">
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><span class="icons">●●● ▮</span></div>
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">签</div>
+            <div><div class="brand-name">课程签到</div><div class="brand-sub">西安交通大学</div></div>
+          </div>
+          <div class="user"><span class="user-name">李小明</span><span class="user-role">学生</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="pill"><span>当前课程</span></div>
+            <span class="when">周三 08:00–09:40</span>
+          </div>
+          <div class="cname">自动控制原理</div>
+          <div class="meta">
+            <div><span class="k">教师</span><span class="v">张伟</span></div>
+            <div><span class="k">地点</span><span class="v">教二楼 301</span></div>
+            <div><span class="k">范围</span><span class="v">50 米</span></div>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <span class="cd-main">距离开课还有 10 分钟</span>
+          <span class="cd-sub">签到已开启 · 07:50–09:50</span>
+        </div>
+
+        <div class="sign">
+          <div class="ring primary">
+            <div class="btn primary"><span class="t">签到</span><span class="s">点击完成签到</span></div>
+          </div>
+        </div>
+
+        <div class="loc success"><i class="dot"></i><span>当前位置在签到范围内 · 距点位 23 米</span></div>
+        <div class="footer"><span>我的签到记录</span><i></i><span>退出登录</span></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="tagline t-blue">状态一 · 可签到</span>
+      <h3>在窗口内、在范围内、没签过</h3>
+      <p>按钮为蓝色高亮，点击后上报经纬度，由云端裁决。客户端不做任何范围判断。</p>
+    </div>
+  </div>
+
+  <!-- 状态二：未到时间 -->
+  <div class="unit">
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar"><span>7:35</span><span class="icons">●●● ▮</span></div>
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">签</div>
+            <div><div class="brand-name">课程签到</div><div class="brand-sub">西安交通大学</div></div>
+          </div>
+          <div class="user"><span class="user-name">李小明</span><span class="user-role">学生</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="pill"><span>当前课程</span></div>
+            <span class="when">周三 08:00–09:40</span>
+          </div>
+          <div class="cname">自动控制原理</div>
+          <div class="meta">
+            <div><span class="k">教师</span><span class="v">张伟</span></div>
+            <div><span class="k">地点</span><span class="v">教二楼 301</span></div>
+            <div><span class="k">范围</span><span class="v">50 米</span></div>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <span class="cd-main">距离开课还有 25 分钟</span>
+          <span class="cd-sub">开课前 10 分钟开启签到（07:50）</span>
+        </div>
+
+        <div class="sign">
+          <div class="ring">
+            <div class="btn muted"><span class="t">未开始</span><span class="s">07:50 开启</span></div>
+          </div>
+        </div>
+
+        <div class="loc muted"><i class="dot"></i><span>签到将在开课前 10 分钟自动开启</span></div>
+        <div class="footer"><span>我的签到记录</span><i></i><span>退出登录</span></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="tagline t-gray">状态二 · 未到时间</span>
+      <h3>来早了，按钮置灰</h3>
+      <p>倒计时持续显示，学生知道什么时候可以签，不用反复刷新。到点后按钮自动变亮。</p>
+    </div>
+  </div>
+
+  <!-- 状态三：已签到 -->
+  <div class="unit">
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar"><span>8:02</span><span class="icons">●●● ▮</span></div>
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">签</div>
+            <div><div class="brand-name">课程签到</div><div class="brand-sub">西安交通大学</div></div>
+          </div>
+          <div class="user"><span class="user-name">李小明</span><span class="user-role">学生</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="pill"><span>当前课程</span></div>
+            <span class="when">周三 08:00–09:40</span>
+          </div>
+          <div class="cname">自动控制原理</div>
+          <div class="meta">
+            <div><span class="k">教师</span><span class="v">张伟</span></div>
+            <div><span class="k">地点</span><span class="v">教二楼 301</span></div>
+            <div><span class="k">范围</span><span class="v">50 米</span></div>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <span class="cd-main">已完成签到</span>
+          <span class="cd-sub">签到时间 08:02</span>
+        </div>
+
+        <div class="sign">
+          <div class="ring">
+            <div class="btn success"><span class="t">已签到</span><span class="s">不可重复签到</span></div>
+          </div>
+        </div>
+
+        <div class="loc success"><i class="dot"></i><span>本节课已完成签到，无需再次定位</span></div>
+        <div class="footer"><span>我的签到记录</span><i></i><span>退出登录</span></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="tagline t-green">状态三 · 已签到</span>
+      <h3>签完即锁死，没有重试入口</h3>
+      <p>按钮变为绿色不可点。唯一索引 <code>userId + courseId + sessionDate</code> 在数据库层兜底，并发也绕不过。</p>
+    </div>
+  </div>
+
+  <!-- 状态四：超出范围 -->
+  <div class="unit">
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar"><span>7:56</span><span class="icons">●●● ▮</span></div>
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">签</div>
+            <div><div class="brand-name">课程签到</div><div class="brand-sub">西安交通大学</div></div>
+          </div>
+          <div class="user"><span class="user-name">李小明</span><span class="user-role">学生</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="pill"><span>当前课程</span></div>
+            <span class="when">周三 08:00–09:40</span>
+          </div>
+          <div class="cname">自动控制原理</div>
+          <div class="meta">
+            <div><span class="k">教师</span><span class="v">张伟</span></div>
+            <div><span class="k">地点</span><span class="v">教二楼 301</span></div>
+            <div><span class="k">范围</span><span class="v">50 米</span></div>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <span class="cd-main">距离开课还有 4 分钟</span>
+          <span class="cd-sub">签到已开启 · 07:50–09:50</span>
+        </div>
+
+        <div class="sign">
+          <div class="ring primary">
+            <div class="btn primary"><span class="t">签到</span><span class="s">点击完成签到</span></div>
+          </div>
+        </div>
+
+        <div class="loc warn"><i class="dot"></i><span>当前位置超出范围 · 距点位 128 米（允许 50 米）</span></div>
+        <div class="footer"><span>我的签到记录</span><i></i><span>退出登录</span></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="tagline t-orange">状态四 · 超出范围</span>
+      <h3>按钮仍可点，云端会拒绝</h3>
+      <p>页面先给出橙色提示与实际距离；点下去由云端返回 410 并提示「走到点位附近后重新定位」，不写入任何记录。</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="notes">
+  <div class="note">
+    <h4>为什么按钮还能点</h4>
+    <p>客户端的距离只是「展示」，不是「裁决」。如果按钮在超范围时直接禁用，学生只要改前端就能绕过去。
+      所以按钮照常可点，由云端用服务端时间和服务端距离判定，拒绝时不写库。</p>
+  </div>
+  <div class="note">
+    <h4>为什么只有一个按钮</h4>
+    <p>不需要先选「我是老师还是学生」，也不需要先选课程。身份来自登录令牌，
+      课程由「今天第几节 + 当前时间」自动匹配，学生只做一件事：按下去。</p>
+  </div>
+  <div class="note">
+    <h4>四态与云端返回码</h4>
+    <p><code>0</code> 成功 · <code>410</code> 超出范围 · <code>411</code> 已签到 ·
+      <code>412</code> 课程不存在/停用 · <code>413</code> 不在签到时间内 ·
+      <code>401</code> 登录失效 · <code>403</code> 角色无权限。</p>
+  </div>
+</div>
+
+</body>
+</html>

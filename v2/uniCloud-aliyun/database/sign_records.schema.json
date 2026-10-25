@@ -1,0 +1,96 @@
+{
+  "bsonType": "object",
+  "required": ["userId", "courseId", "sessionDate", "signTime", "result"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "签到记录主键"
+    },
+    "userId": {
+      "bsonType": "string",
+      "title": "签到人",
+      "description": "逻辑外键 -> users._id",
+      "foreignKey": "users._id"
+    },
+    "userName": {
+      "bsonType": "string",
+      "title": "姓名",
+      "description": "冗余快照"
+    },
+    "account": {
+      "bsonType": "string",
+      "title": "学号",
+      "description": "冗余快照"
+    },
+    "className": {
+      "bsonType": "string",
+      "title": "班级",
+      "description": "冗余快照"
+    },
+    "courseId": {
+      "bsonType": "string",
+      "title": "课程",
+      "description": "逻辑外键 -> courses._id",
+      "foreignKey": "courses._id"
+    },
+    "courseName": {
+      "bsonType": "string",
+      "title": "课程名称",
+      "description": "冗余快照。课程删除后记录仍可读"
+    },
+    "teacherName": {
+      "bsonType": "string",
+      "title": "授课教师",
+      "description": "冗余快照"
+    },
+    "sessionDate": {
+      "bsonType": "string",
+      "title": "上课日期",
+      "description": "YYYY-MM-DD（北京时间）。与 courseId 一起确定「哪一节课」，是去重键的一部分"
+    },
+    "signTime": {
+      "bsonType": "timestamp",
+      "title": "签到时间"
+    },
+    "result": {
+      "bsonType": "string",
+      "title": "签到结果",
+      "description": "本周固定 success；预留迟到等扩展",
+      "enum": ["success"],
+      "defaultValue": "success"
+    },
+    "distance": {
+      "bsonType": "double",
+      "title": "距点位距离",
+      "description": "服务端 Haversine 计算结果，单位米"
+    },
+    "latitude": {
+      "bsonType": "double",
+      "title": "签到纬度",
+      "description": "客户端上报，服务端校验"
+    },
+    "longitude": {
+      "bsonType": "double",
+      "title": "签到经度"
+    },
+    "accuracy": {
+      "bsonType": "double",
+      "title": "定位精度",
+      "description": "微信/浏览器返回的 accuracy，单位米，仅作参考"
+    },
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备标识",
+      "description": "审计字段，不参与判定。去重依据是 userId+courseId+sessionDate"
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "title": "写入时间"
+    }
+  }
+}
