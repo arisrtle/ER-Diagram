@@ -1,0 +1,24 @@
+{
+  "pages": [
+    {
+      "path": "pages/checkin/checkin",
+      "style": {
+        "navigationBarTitleText": "签到",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "学生登录"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "定位签到",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}
